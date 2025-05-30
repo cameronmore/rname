@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,6 +10,15 @@ import (
 )
 
 func main() {
+
+	os.Args[0] = "rname"
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "\nrname [current-path] [new-path]\n\nrname is a more graceful rename/mv tool, where any content at the current path is renammed or moved to the new path. Both the old and new paths must be the same type (both files, both directories). rname automatically creates '-duplicate' files if the chosen new path already exists\n")
+		fmt.Println("")
+	}
+
+	flag.Parse()
 
 	from, to := os.Args[1], os.Args[2]
 
