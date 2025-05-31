@@ -11,11 +11,17 @@ import (
 
 func main() {
 
-	os.Args[0] = "rname"
-	nm := flag.Bool("nm", false, "nm (no-merge) avoids the default merging of directories if the target path already exists")
+	nm := false
 
+	os.Args[0] = "rname"
+
+	flag.BoolVar(&nm, "nm", false, "nm (no-merge) avoids the default merging of directories if the target path already exists")
+	flag.BoolVar(&nm, "no-merge", false, "nm (no-merge) avoids the default merging of directories if the target path already exists")
+
+	ogUsage := flag.Usage
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "\nrname [current-path] [new-path]\n\nrname is a more graceful rename/mv tool, where any content at the current path is renammed or moved to the new path. Both the old and new paths must be the same type (both files, both directories). rname automatically creates '-duplicate' files if the chosen new path already exists\n")
+		fmt.Fprintf(os.Stderr, "\nrname [current-path] [new-path]\n\nrname is a more graceful rename/mv tool, where any content at the current path is renammed or moved to the new path. Both the old and new paths must be the same type (both files, both directories). rname automatically creates '-duplicate' files if the chosen new path already exists\n\n")
+		ogUsage()
 		fmt.Println("")
 	}
 
@@ -25,13 +31,13 @@ func main() {
 
 	from, to := args[0], args[1]
 
-	if !*nm {
+	if !nm {
 		err := Rnm(from, to)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-	} else if *nm {
+	} else if nm {
 		err := RnmNm(from, to)
 		if err != nil {
 			fmt.Println(err)
