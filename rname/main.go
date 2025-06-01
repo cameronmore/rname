@@ -11,12 +11,12 @@ import (
 
 func main() {
 
-	nm := false
+	m := false
 
 	os.Args[0] = "rname"
 
-	flag.BoolVar(&nm, "nm", false, "nm (no-merge) avoids the default merging of directories if the target path already exists")
-	flag.BoolVar(&nm, "no-merge", false, "nm (no-merge) avoids the default merging of directories if the target path already exists")
+	flag.BoolVar(&m, "m", false, "merge merges directories if the target path already exists")
+	flag.BoolVar(&m, "merge", false, "merge merges directories if the target path already exists")
 
 	ogUsage := flag.Usage
 	flag.Usage = func() {
@@ -31,13 +31,13 @@ func main() {
 
 	from, to := args[0], args[1]
 
-	if !nm {
+	if m {
 		err := Rnm(from, to)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-	} else if nm {
+	} else if !m {
 		err := RnmNm(from, to)
 		if err != nil {
 			fmt.Println(err)
@@ -235,7 +235,11 @@ func RnmNm(currentPath, newPath string) error {
 
 	if cfile.IsDir() && nfile.IsDir() {
 		// here, we know the two inputs are dirs and have the same name/path.
-		RnmNm(currentPath, newPath+"_duplicate")
+		err := RnmNm(currentPath, newPath+"_duplicate")
+		if err != nil {
+			return err
+		}
+		fmt.Println("dir already exists, wrote duplicate ",newPath+"_duplicate")
 	}
 	return nil
 }

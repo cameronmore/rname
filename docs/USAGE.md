@@ -11,8 +11,4 @@
 
 suppose I'm in my `dev/` directory and I want to rename a project from `my-react-app` to `my-vue-app`. Just run `rname my-react-app my-vue-app`.
 
-What if you've already created `my-vue-app`? By default, `rname` will perform a merge of all the contents of `my-react-app` into the existing `my-vue-app`. If there are any potential duplicate files, the ones coming from `my-react-app` like `index.html` will be renammed `index_duplicate.html`.
-
-To avoid this, add the `-nm` flag to the command (which means 'no merge'). Now, since `my-vue-app` already exists, a new directory is created: `my-vue-app_duplicate`.
-
-please make an issue if the default should be the other way around (i.e., never merge, opt-in to merge).
+What if you've already created `my-vue-app`? by default, `rname` will make a duplicate (`my-vue-app_duplicate`). optionally, `rname` will perform a merge of all the contents of `my-react-app` into the existing `my-vue-app` (by adding the `-m` flag). If there are any potential duplicate files in the directory merge, the ones coming from `my-react-app` like `index.html` will be renammed `index_duplicate.html`.
